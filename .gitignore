@@ -1,0 +1,21 @@
+# Datos de investigación y resultados generados
+data/raw/*
+data/processed/*
+models/*
+results/*
+
+# Artefacto imprescindible para ejecutar la versión pública.
+!models/
+!models/qsar_daphnia_ec50.joblib
+
+!.gitkeep
+
+# Entornos y archivos de Python
+.venv/
+__pycache__/
+*.log
+*.py[cod]
+.ipynb_checkpoints/
+
+# Archivos locales de VS Code
+.vscode/

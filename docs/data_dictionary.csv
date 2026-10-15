@@ -1,0 +1,17 @@
+column_name,description,stage,required
+casrn,Identificador CAS del compuesto,raw,yes
+chemical_name,Nombre reportado en la fuente,raw,yes
+smiles,Representación estructural del compuesto,raw,yes
+species,Especie evaluada,raw,yes
+exposure_hours,Duración de la exposición en horas,raw,yes
+effect,Respuesta biológica evaluada,raw,yes
+endpoint,Tipo de medida toxicológica,raw,yes
+ec50_value,Valor original de EC50,raw,yes
+ec50_unit,Unidad original del valor EC50,raw,yes
+ec50_mg_l,EC50 estandarizada a mg/L,processed,yes
+log_ec50_mg_l,Logaritmo base 10 de EC50 en mg/L,target,yes
+source_reference,Referencia del ensayo,raw,yes
+source_record_id,Identificador del registro en la fuente,raw,yes
+canonical_smiles,SMILES canónico usado para agrupar,processed,yes
+n_valid_assays,Número de ensayos válidos consolidados por compuesto,processed,yes
+ec50_log_sd,Desviación estándar de log EC50 entre ensayos,processed,no
