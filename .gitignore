@@ -7,6 +7,7 @@ results/*
 # Artefacto imprescindible para ejecutar la versión pública.
 !models/
 !models/qsar_daphnia_ec50.joblib
+!models/qsar_multiorganismo.joblib
 
 !.gitkeep
 

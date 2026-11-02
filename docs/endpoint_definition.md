@@ -1,40 +1,30 @@
-# Endpoint del modelo QSAR
+# Endpoints del modelo QSAR multi-organismo
 
 ## Pregunta predictiva
 
-Estimar la toxicidad acuática aguda de un compuesto químico como `log10(EC50_mg_L)` para *Daphnia magna*.
+Estimar concentraciones de efecto agudo para contaminantes emergentes en grupos de organismos acuáticos y priorizar la sustancia usando el grupo más sensible con validación y dominio de aplicabilidad aceptables.
 
-## Endpoint seleccionado
+## Endpoints comparables
 
-- Organismo: *Daphnia magna*.
-- Medio: agua dulce.
-- Duración de exposición: 48 horas.
-- Efecto: inmovilización.
-- Medida: EC50.
-- Unidad original permitida: mg/L o una unidad convertible de forma documentada a mg/L.
-- Variable objetivo: `log_ec50_mg_l = log10(ec50_mg_l)`.
+| Grupo | Ensayo incluido | Variable objetivo |
+|---|---|---|
+| Crustáceos | EC50 de inmovilización, 48 h, agua dulce | `log10(EC50_mg_L)` |
+| Peces | LC50 de mortalidad, 96 h, agua dulce | `log10(LC50_mg_L)` |
+| Algas | EC50 de respuesta poblacional o crecimiento, 72 h, agua dulce | `log10(EC50_mg_L)` |
 
-El logaritmo reduce el efecto de concentraciones extremas y permite entrenar una regresión más estable.
+Cada grupo se entrena en un modelo independiente. No se combinan EC50 y LC50 ni respuestas de organismos distintos en una sola variable de entrenamiento.
 
 ## Criterios de inclusión
 
-1. Sustancia única, identificada con CASRN y estructura química o SMILES.
-2. Ensayo de *Daphnia magna* con exposición de 48 h.
-3. Resultado EC50 numérico, positivo y expresado en concentración.
-4. Unidad convertible a mg/L con el factor de conversión registrado.
-5. Referencia o identificador de fuente conservado.
+1. CASRN y SMILES químicamente válido por RDKit.
+2. Duración, medio acuático, endpoint y tipo de efecto explícitos para cada grupo.
+3. Concentración positiva y unidad convertible de forma documentada a mg/L.
+4. Resultado numérico sin operadores de censura (`>`, `<`, `~`) y con trazabilidad de ECOTOX.
 
-## Criterios de exclusión
+## Integración ambiental
 
-1. Mezclas, formulaciones comerciales o sustancias sin estructura química definida.
-2. Ensayos con otra especie, duración o efecto biológico.
-3. Valores cualitativos, intervalos sin valor central o resultados sin unidad.
-4. Registros duplicados del mismo ensayo.
-
-## Consolidación por compuesto
-
-Un mismo compuesto puede tener varios ensayos válidos. Se conservarán los registros crudos y, para el entrenamiento inicial, se calculará la mediana de `log_ec50_mg_l` por estructura química canónica. La cantidad de ensayos y la variabilidad entre estudios se conservarán como campos de trazabilidad.
+La aplicación muestra el resultado de cada grupo. La prioridad general usa la menor concentración de efecto entre los grupos cuyo desempeño de validación es aceptable y cuya molécula está dentro del dominio de aplicabilidad. Un grupo con desempeño insuficiente se conserva como evidencia complementaria, pero no determina la prioridad.
 
 ## Alcance
 
-El modelo estimará toxicidad acuática aguda para el endpoint definido. La posterior priorización ambiental en seis categorías será una capa de interpretación separada y no la variable objetivo con la que se entrena el modelo.
+La salida es una estimación QSAR de apoyo a decisión para organismos acuáticos. No sustituye ensayos experimentales ni permite afirmar toxicidad en todas las especies acuáticas.

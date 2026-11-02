@@ -1,12 +1,24 @@
-# Modelo QSAR de toxicidad acuática
+# Modelo QSAR de toxicidad acuática multi-organismo
 
 Proyecto de tesis para entrenar y validar un modelo supervisado que estime un endpoint ecotoxicológico medido experimentalmente.
 
 ## Estado actual
 
-- Endpoint QSAR definido: EC50 de inmovilización a 48 h en *Daphnia magna* de agua dulce.
-- `src/filter_training_data.py` audita el consolidado y genera los candidatos reproducibles para ese endpoint.
-- El entrenamiento sólo se habilita cuando haya al menos 300 sustancias únicas con el endpoint completo y estructura química verificable.
+- Tres modelos QSAR independientes: crustáceos, peces y algas de agua dulce.
+- La prioridad general usa la concentración de efecto más baja entre los grupos con validación predictiva aceptable y dentro de su dominio de aplicabilidad.
+- La aplicación muestra las estimaciones individuales y conserva como complementarios los grupos con validación insuficiente.
+
+## Reconstruir el modelo multi-organismo
+
+Con la descarga ASCII de ECOTOX ya ubicada en `data/raw/`, ejecuta:
+
+```powershell
+.\.venv\Scripts\python.exe .\src\build_multigroup_ecotox_dataset.py
+.\.venv\Scripts\python.exe .\src\resolve_multigroup_structures.py
+.\.venv\Scripts\python.exe .\src\train_multigroup_qsar.py
+```
+
+Los scripts generan los conjuntos depurados por grupo, resuelven SMILES por CASRN y validan cada modelo mediante familias estructurales.
 
 ## Preparar datos desde el consolidado
 
